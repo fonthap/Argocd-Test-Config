@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  NGINX_PORT: "80"
+  NGINX_SERVER_NAME: "example.com"
+  NGINX_PROXY_PASS: "http://backend-service:8080"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-app
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+    envFrom:
+    - configMapRef:
+        name: nginx-config
